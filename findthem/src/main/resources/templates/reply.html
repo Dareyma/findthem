@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Blog Post - Start Bootstrap Template</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+
+  <!-- Custom styles for this template -->
+  <link  rel="stylesheet" href="../static/css/blog-post.css" th:href="@{/css/blog-post.css}">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/}">Findthem</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" th:href="@{/}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/account}">Mi cuenta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+        <h1 class="mt-4" th:text="${post.title}"></h1>
+        <p class="lead"> by <a href="#" th:text="${post.user_id.username}"></a> </p>
+        <hr>
+        <p th:text="${post.date}"> </p>
+        <hr>
+        <img class="img-fluid rounded" th:src="${post.image}" alt="">
+        <hr>
+        <p class="lead" th:text="${post.text}"></p>
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Comentar:</h5>
+          <div class="card-body">
+            <form  th:action="@{/addReply}" th:object="${replys}" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" 
+                th:field="*{text}" type="text">
+                </textarea>
+              </div>
+              <div class="form-row">
+                <div class="name">Imagen: </div>
+                <div class="value">
+                    <input class="input--style-6" type="file" name="imagen">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Single Comment -->
+        <div class="media mb-4" th:each="reply : ${replys}">
+          <img class="d-flex mr-3 rounded-circle" src="" alt="">
+          <div class="media-body">
+            <h5 class="mt-0" th:text="${reply.user_id.username}"></h5>
+            <p th:text="${reply.texto}"></p>
+            <img th:src="${reply.image}">
+            <div class="card-footer">
+              <small class="text-muted" th:text="${reply.date}">ç</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+        <!-- Search Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Buscar</h5>
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-append">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categories Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Categorias</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a th:href="@{/listPostType(type=1)}">Adopción</a>
+                  </li>
+                  <li>
+                    <a th:href="@{/listPostType(type=2)}">Encontrados</a>
+                  </li>
+                  <li>
+                    <a th:href="@{/listPostType(type=3)}">Perdidos</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#"></a>
+                  </li>
+                  <li>
+                    <a th:href="@{/}">Todos los posts</a>
+                  </li>
+                  <li>
+                    <a href="#"></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Side Widget</h5>
+          <div class="card-body">
+            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="../static/js/jquery.min.js" th:src="@{js/jquery.min.js}"></script>
+  <script src="../static/js/bootstrap.bundle.min.js" th:src="@{js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

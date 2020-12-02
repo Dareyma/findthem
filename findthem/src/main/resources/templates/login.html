@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <!-- Required meta tags-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Colorlib Templates">
+        <meta name="author" content="Colorlib">
+        <meta name="keywords" content="Colorlib Templates">
+    
+        <!-- Title Page-->
+        <title>Login</title>
+    
+        <!-- Font special for pages-->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+		<link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    
+        <!-- Main CSS-->
+        <link href="../static/css/main.css" rel="stylesheet" media="all" th:href="@{/css/main.css}">
+    </head>
+    
+    <body>
+        <div class="page-wrapper bg-dark p-t-100 p-b-50">
+            <div class="wrapper wrapper--w900">
+                <div class="card card-6">
+                    <div class="card-heading bg-primary">
+                        <h2 class="title">Login</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" class="login100-form validate-form" th:action="@{/logincheck}" method="POST">
+                            <div class="form-row">
+                                <div class="name">Nombre</div>
+                                <div class="value" data-validate = "Valid email is required: ex@abc.xyz">
+                                    <input class="input--style-6" type="text" name="username">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="name">Contraseña</div>
+                                <div class="value">
+                                    <div class="input-group" data-validate = "Password is required">
+										<input class="input--style-6" type="password" name="password" placeholder="Password">
+                                    </div>
+                                </div>
+							</div>
+							
+							<div th:if="${error!=null}" class="alert alert-danger" role="alert">Invalid username or password</div>
+							<div class="card-footer text-center">
+								<button class="btn btn-outline-primary text-dark" type="submit">Login</button>
+								<a th:href="@{/registro}"><button type="button" class="btn btn-outline-secondary text-dark" >Register</button></a>
+							</div>
+                        </form>
+                        <form action="#" class="login100-form validate-form" th:action="@{/logincheck}" method="POST">
+                         	<div>
+                             	<input class="input--style-6" type="hidden" name="username" th:value="Invitado" >
+								<input class="input--style-6" type="hidden" name="password" placeholder="Password" th:value="Invitado" >
+                            </div>
+                            <div class="col-md-4 center-block">
+							    <button class="btn btn-outline-success btn-block text-dark" type="submit">Entrar como invitado</button>
+                            </div>
+                        </form>
+                        
+                        
+                    </div>
+				</div>
+			</div>
+		</div>
+		
+        <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+        <script src="../static/js/global.js" th:src="@{/js/global.js}"></script>
+    </body>
+    </html>
+</html>
