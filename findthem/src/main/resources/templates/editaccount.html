@@ -30,62 +30,44 @@
                         <h2 class="title bg-secondary">Regístrate gratis</h2>
                     </div>
                     <div class="card-body">
-                        <form action="#" th:action="@{/addUser}" th:object="${user}" method="POST">
+                        <form action="#" th:action="@{/updateAccount}" th:object="${user}" method="POST">
                             <div class="form-row">
                                 <div class="name">Nombre</div>
                                 <div class="value">
-                                    <input class="input--style-6" type="text" th:field="*{name}" name="name">
+                                    <input class="input--style-6" type="text" th:field="*{name}" name="name" th:errorclass="'form-control alert-danger'">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="name">Apellidos</div>
                                 <div class="value">
-                                    <input class="input--style-6" type="text" th:field="*{surname}" name="surname">
+                                    <input class="input--style-6" type="text" th:field="*{surname}" name="surname" th:errorclass="'form-control alert-danger'">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="name">Nombre de usuario</div>
                                 <div class="value">
-                                    <input class="input--style-6" type="text" th:field="*{username}" name="username">
+                                    <input class="input--style-6" type="text" th:field="*{username}" name="username" th:errorclass="'form-control alert-danger'">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="name">Email address</div>
                                 <div class="value">
                                     <div class="input-group">
-                                        <input class="input--style-6" type="email" name="email" th:field="*{email}" placeholder="example@email.com">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="name">Contraseña</div>
-                                <div class="value">
-                                    <div class="input-group">
-                                        <input class="input--style-6" type="password" th:field="*{password}" name="password">
+                                        <input class="input--style-6" type="email" name="email" th:field="*{email}" placeholder="example@email.com" th:errorclass="'form-control alert-danger'">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="name">Telefono</div>
                                 <div class="value">
-                                    <input class="input--style-6" type="text" th:field="*{phone}" name="phone">
+                                    <input class="input--style-6" type="text" th:field="*{phone}" name="phone" th:errorclass="'form-control alert-danger'">
                                 </div>
                             </div>
-                            <input type="hidden" th:field="*{enabled}" th:value="1"/>
 
-                            <div class="form-row">
-                                <div class="name">Elija la opción que se adecúe mejor a usted.</div>
-                                <div class="value text-center">
-                                    <select class="browser-default custom-select" data-style="btn-primary" name="role">
-                                        <option th:value="protectora">PROTECTORA</option>
-                                        <option th:value="admin">ADMIN</option>
-                                        <option th:value="user" selected>USUARIO</option>
-                                    </select>
-                                </div>
-                            </div>
+                            <input type="hidden" th:field="*{password}"/>
+
                             <div class="card-footer text-center">
-                                <button class="btn btn-primary" type="submit">Registrarse</button>
-                                <a th:href="@{/login}"><button class="btn btn-secondary" type="button">Login</button></a>
+                                <button class="btn btn-primary" type="submit">Aceptar</button>
                             </div>
                         </form>
                     </div>

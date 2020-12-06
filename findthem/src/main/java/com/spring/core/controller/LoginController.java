@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.core.constants.Constantes;
+
 
 @Controller
 @RequestMapping("/")
@@ -20,7 +22,7 @@ public class LoginController {
 		LOG.info("METHOD: showLoginForm() -- PARAMS: error = " + error + ", logout=" + logout);
 		model.addAttribute("error", error);
 		model.addAttribute("logout", logout);
-		return "login";
+		return Constantes.LOGIN_VIEW;
 	}
 	
 	

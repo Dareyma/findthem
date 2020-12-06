@@ -1,9 +1,13 @@
 package com.spring.core.model;
 
+import javax.validation.constraints.NotEmpty;
+
 public class ReplyModel {
 	
 	private int id;
-	private String texto;
+	
+	@NotEmpty(message = "El texto no puede estar en blanco")
+	private String text;
 	private String image;
 	private String date;
 	private UserModel user_id;
@@ -13,10 +17,10 @@ public class ReplyModel {
 		
 	}
 
-	public ReplyModel(int id, String texto, String image, String date, UserModel  user_id, PostModel post_id) {
+	public ReplyModel(int id, String text, String image, String date, UserModel  user_id, PostModel post_id) {
 		super();
 		this.id = id;
-		this.texto = texto;
+		this.text = text;
 		this.image = image;
 		this.date = date;
 		this.user_id = user_id;
@@ -31,12 +35,12 @@ public class ReplyModel {
 		this.id = id;
 	}
 
-	public String getTexto() {
-		return texto;
+	public String getText() {
+		return text;
 	}
 
-	public void setTexto(String texto) {
-		this.texto = texto;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getImage() {

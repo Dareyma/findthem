@@ -27,29 +27,29 @@
             <div class="wrapper wrapper--w900">
                 <div class="card card-6">
                     <div class="card-heading bg-primary">
-                        <h2 class="title">Login</h2>
+                        <h2 class="title ml-4 mt-3">Login</h2>
                     </div>
                     <div class="card-body">
                         <form action="#" class="login100-form validate-form" th:action="@{/logincheck}" method="POST">
                             <div class="form-row">
                                 <div class="name">Nombre</div>
                                 <div class="value" data-validate = "Valid email is required: ex@abc.xyz">
-                                    <input class="input--style-6" type="text" name="username">
+                                    <input class="input--style-6" type="text" name="username" placeholder="Introduzca su nombre de usuario">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="name">Contraseña</div>
                                 <div class="value">
                                     <div class="input-group" data-validate = "Password is required">
-										<input class="input--style-6" type="password" name="password" placeholder="Password">
+										<input class="input--style-6" type="password" name="password" placeholder="Introduzca su contraseña">
                                     </div>
                                 </div>
 							</div>
 							
 							<div th:if="${error!=null}" class="alert alert-danger" role="alert">Invalid username or password</div>
 							<div class="card-footer text-center">
-								<button class="btn btn-outline-primary text-dark" type="submit">Login</button>
-								<a th:href="@{/registro}"><button type="button" class="btn btn-outline-secondary text-dark" >Register</button></a>
+								<button class="btn btn-outline-primary text-dark" type="submit">Entrar</button>
+								<a th:href="@{/registro}"><button type="button" class="btn btn-outline-secondary text-dark" >Registrarte</button></a>
 							</div>
                         </form>
                         <form action="#" class="login100-form validate-form" th:action="@{/logincheck}" method="POST">
@@ -57,8 +57,8 @@
                              	<input class="input--style-6" type="hidden" name="username" th:value="Invitado" >
 								<input class="input--style-6" type="hidden" name="password" placeholder="Password" th:value="Invitado" >
                             </div>
-                            <div class="col-md-4 center-block">
-							    <button class="btn btn-outline-success btn-block text-dark" type="submit">Entrar como invitado</button>
+                            <div>
+							    <button class="btn btn-outline-success btn-block text-dark d-flex justify-content-center" type="submit">Entrar como invitado</button>
                             </div>
                         </form>
                         

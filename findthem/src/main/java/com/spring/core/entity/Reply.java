@@ -20,8 +20,8 @@ public class Reply {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="texto")
-	private String texto;
+	@Column(name="text")
+	private String text;
 	
 	@Column(name="image", nullable = true)
 	private String image;
@@ -41,10 +41,10 @@ public class Reply {
 		
 	}
 
-	public Reply(int id, String texto, String image, String date, User user_id, Post post_id) {
+	public Reply(int id, String text, String image, String date, User user_id, Post post_id) {
 		super();
 		this.id = id;
-		this.texto = texto;
+		this.text = text;
 		this.image = image;
 		this.date = date;
 		this.user_id = user_id;
@@ -59,12 +59,12 @@ public class Reply {
 		this.id = id;
 	}
 
-	public String getTexto() {
-		return texto;
+	public String getText() {
+		return text;
 	}
 
-	public void setText(String texto) {
-		this.texto = texto;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getImage() {

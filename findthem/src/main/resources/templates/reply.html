@@ -62,17 +62,25 @@
         <hr>
         <p class="lead" th:text="${post.text}"></p>
         <hr>
+          <a class="btn btn-outline-danger" id="btn-ventana" th:if="${like.enabled}"
+          th:href="@{/changeLike(post_id=${post.post_id})}">&#10084;</a>
+          <a class="btn btn-outline-danger" id="btn-ventana" th:if="not ${like.enabled}"
+            th:href="@{/changeLike(post_id=${post.post_id})}">&#9825;</a>
+        <hr>
 
         <!-- Comments Form -->
         <div class="card my-4">
           <h5 class="card-header">Comentar:</h5>
           <div class="card-body">
-            <form  th:action="@{/addReply}" th:object="${replys}" method="post" enctype="multipart/form-data">
+            <form  th:action="@{/addReply(post_id=${post.post_id})}" th:object="${reply}" method="post" enctype="multipart/form-data">
               <div class="form-group">
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" 
                 th:field="*{text}" type="text">
                 </textarea>
               </div>
+              
+              <input type="number" name="post_id" th:field="*{post_id}" disabled/>
+              
               <div class="form-row">
                 <div class="name">Imagen: </div>
                 <div class="value">
@@ -85,14 +93,14 @@
         </div>
 
         <!-- Single Comment -->
-        <div class="media mb-4" th:each="reply : ${replys}">
+        <div class="media mb-4" th:each="respuesta : ${respuestas}">
           <img class="d-flex mr-3 rounded-circle" src="" alt="">
           <div class="media-body">
-            <h5 class="mt-0" th:text="${reply.user_id.username}"></h5>
-            <p th:text="${reply.texto}"></p>
-            <img th:src="${reply.image}">
+            <h5 class="mt-0" th:text="${respuesta.user_id.username}"></h5>
+            <p th:text="${respuesta.text}"></p>
+            <img th:src="${respuesta.image}">
             <div class="card-footer">
-              <small class="text-muted" th:text="${reply.date}">ç</small>
+              <small class="text-muted" th:text="${respuesta.date}">ç</small>
             </div>
           </div>
         </div>

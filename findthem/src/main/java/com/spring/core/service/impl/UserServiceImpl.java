@@ -45,6 +45,19 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		
 		return new ArrayList<GrantedAuthority>(auths);
 	}
+    
+    @Override
+    public UserModel updateUser(UserModel userModel) {
+    	com.spring.core.entity.User user=transform(userModel);
+        return transform(userRepository.save(user));
+    } 
+	
+	@Override
+    public int removeUser(int id) {
+        userRepository.deleteById(id);
+		return 0;
+	}
+       
 	
 	@Override
     public com.spring.core.entity.User transform(UserModel userModel) {
@@ -78,6 +91,12 @@ public class UserServiceImpl implements UserDetailsService, UserService{
     @Override
 	public com.spring.core.entity.User addUser(com.spring.core.entity.User user) {
 		user.setEnabled(true);
+        return userRepository.save(user);
+	}
+
+	@Override
+	public com.spring.core.entity.User editUser(UserModel userM) {
+		com.spring.core.entity.User user=transform(userM);
         return userRepository.save(user);
 	}
 

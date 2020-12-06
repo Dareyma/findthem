@@ -9,9 +9,13 @@ public interface UserService {
 
 		public abstract List<UserModel> listAllUsers();
 		
-		public abstract User addUser(User user);
+		public abstract User addUser(User userM);
 		
-		//public abstract UserModel addUser(UserModel userModel);
+		public abstract User editUser(UserModel userM);
+		
+		public abstract UserModel updateUser(UserModel userModel);
+		
+		public abstract int removeUser(int id);
 		
 		//transformar entidad a modelo
 	    public abstract User transform(UserModel userModel);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="utf-8">
     <title>Account</title>
 
     <link href="../static/css/account.css" rel="stylesheet" media="all" th:href="@{/css/account.css}">
@@ -54,7 +54,8 @@
                             <div class="mt-3">
                                 <h4 th:text="${user.username}"></h4>
                                 <hr>
-                                <a class="btn btn-outline-danger" id="btn-ventana">Eliminar cuenta</a>
+                                <a class="btn btn-outline-danger" id="btn-ventana"
+                                th:onclick="|confirmDelete('/deleteAccount')|">Eliminar cuenta</a>
                             </div>
                             </div>
                         </div>
@@ -100,7 +101,7 @@
                             </div>
                             <hr>
                             <div class="row">
-                                <a class="btn btn-outline-info btn-block" href="#">Editar</a>
+                                <a class="btn btn-outline-info btn-block" th:href="@{/editAccount}">Editar</a>
                             </div>
                         </div>
                     </div>

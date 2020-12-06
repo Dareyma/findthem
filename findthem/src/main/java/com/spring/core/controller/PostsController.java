@@ -27,9 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.core.constants.Constantes;
 import com.spring.core.entity.Post;
 import com.spring.core.model.PostModel;
 import com.spring.core.model.UserModel;
+import com.spring.core.service.LikeService;
 import com.spring.core.service.PostService;
 import com.spring.core.service.UserService;
 
@@ -42,6 +44,10 @@ public class PostsController {
 	private PostService postService;
 	
 	@Autowired
+	@Qualifier("likeServiceImpl")
+	private LikeService likeService;
+	
+	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	private static final Log LOG=LogFactory.getLog(ReplyController.class);
@@ -49,9 +55,11 @@ public class PostsController {
 	@GetMapping("/")
 	public ModelAndView listAllPosts() {
 		
-		ModelAndView mav = new ModelAndView("index");
+		ModelAndView mav = new ModelAndView(Constantes.POST_VIEW);
 		
 		mav.addObject("posts", postService.listAllPosts());
+		
+		mav.addObject("likes", likeService.listAllLikes());
 		
 		return mav;
 	}
@@ -72,6 +80,7 @@ public class PostsController {
                 	userModel = user;
                 }
             }
+            
 			
 			LOG.info("Prueba: " + postModel.getPost_id());
 			LOG.info("Prueba2: " + userModel.getUsername());
@@ -114,14 +123,15 @@ public class PostsController {
 
 	@GetMapping("/createPost")
     public ModelAndView createPost(){
-        ModelAndView mav=new ModelAndView("createpost");
+        ModelAndView mav=new ModelAndView(Constantes.POST_CREATE_VIEW);
         mav.addObject("post",new Post());
         return mav;
     }
 	
 	@GetMapping("/editpost")
     public ModelAndView editPost(@RequestParam(name="id") int id, PostModel postModel) {
-        ModelAndView mav = new ModelAndView("createpost");
+        
+		ModelAndView mav = new ModelAndView(Constantes.POST_CREATE_VIEW);
         
         List<PostModel> postslist = postService.listAllPosts();
         

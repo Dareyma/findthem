@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.spring.core.configuration.Paginas;
+import com.spring.core.constants.Constantes;
 import com.spring.core.converter.TestCrypt;
 import com.spring.core.entity.User;
 import com.spring.core.entity.UserRole;
@@ -35,7 +35,7 @@ public class RegisterController {
 
     @GetMapping("/registro")
     public ModelAndView registrar() {
-        ModelAndView mav =new ModelAndView(Paginas.REGISTER_VIEW);
+        ModelAndView mav =new ModelAndView(Constantes.REGISTER_VIEW);
         mav.addObject("user",new User());
         return mav;
     }

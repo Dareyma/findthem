@@ -19,9 +19,6 @@ public class UserModel {
 	@NotEmpty(message = "La contraseña no debe ser rellenada")
 	private String password;
 	
-	@NotEmpty(message = "Debe elegir un rol")
-	private String rol;
-	
 	@NotEmpty(message = "El campo email no puede estar en blanco")
 	private String email;
 	
@@ -34,7 +31,7 @@ public class UserModel {
 		
 	}
 
-	public UserModel(int id, String username, String name, String surname, String password, String rol, String email,
+	public UserModel(int id, String username, String name, String surname, String password, String email,
 			boolean enabled, int phone) {
 		super();
 		this.id = id;
@@ -42,7 +39,6 @@ public class UserModel {
 		this.name = name;
 		this.surname = surname;
 		this.password = password;
-		this.rol = rol;
 		this.email = email;
 		this.enabled = enabled;
 		this.phone = phone;
@@ -86,14 +82,6 @@ public class UserModel {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getRol() {
-		return rol;
-	}
-
-	public void setRol(String rol) {
-		this.rol = rol;
 	}
 
 	public String getEmail() {

@@ -28,9 +28,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.core.constants.Constantes;
+import com.spring.core.model.LikeModel;
 import com.spring.core.model.PostModel;
 import com.spring.core.model.ReplyModel;
 import com.spring.core.model.UserModel;
+import com.spring.core.service.LikeService;
 import com.spring.core.service.PostService;
 import com.spring.core.service.ReplyService;
 import com.spring.core.service.UserService;
@@ -49,6 +52,10 @@ public class ReplyController {
 	private PostService postService;
 	
 	@Autowired
+	@Qualifier("likeServiceImpl")
+	private LikeService likeService;
+	
+	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
@@ -59,20 +66,30 @@ public class ReplyController {
 		
 		PostModel postModel = new PostModel();
 		
-		ModelAndView mav = new ModelAndView("reply");
+		ReplyModel replyModel = new ReplyModel();
+		
+		ModelAndView mav = new ModelAndView(Constantes.REPLY_VIEW);
 		
 		LOG.info("Buscando posts y replys con id_post: " + id);
 		
 		for(PostModel post:postService.listAllPosts()) {
 			LOG.debug("Post entra: ");
 			if(post.getPost_id()==id) {
-				LOG.info("IF: ");
                 postModel=post;
                 LOG.info("Post id: " + postModel.getPost_id());
             }
         }
 		
-		mav.addObject("post", postModel);
+		
+		List<LikeModel> likeslist = likeService.listAllLikes();
+		LikeModel likeModel = new LikeModel();
+        
+        for (LikeModel like:likeslist) {
+			if (like.getPost_id().getPost_id()==postModel.getPost_id()) {
+				likeModel = like;
+			}
+		}
+		
 		
 		List<ReplyModel> replyslist = replyService.listAllReplys();
 		
@@ -81,24 +98,24 @@ public class ReplyController {
 		for(ReplyModel reply:replyslist) {
             if(reply.getPost_id().getPost_id()==id) {
                 rlist.add(reply);
-                LOG.info("Añadida: " + reply);
+                //LOG.info("Añadida: " + reply);
             }
         }
 		
-		mav.addObject("replys", rlist);
+		mav.addObject("reply", replyModel);
+		mav.addObject("like", likeModel);
+		mav.addObject("respuestas", rlist);
+		mav.addObject("post", postModel);
 		
 		return mav;
 	}
 	
 	@PostMapping("/addReply")
-    public String addReply(@RequestParam("imagen") MultipartFile img, @Valid @ModelAttribute("replys") ReplyModel replyModel, BindingResult result,
+    public String addReply(@RequestParam("imagen") MultipartFile img, @RequestParam(name="post_id") int post_id,
+    		@Valid @ModelAttribute("reply") ReplyModel replyModel, BindingResult result,
             RedirectAttributes flash, Model model, Authentication auth) {
 			
 			UserModel userModel = new UserModel();
-			
-			// Usuario que ha creado el reply
-            LOG.info("Usuario: " + auth.getName());
-            List<UserModel> userslist = userService.listAllUsers();
             
             // Fecha de creación del reply
             Date date = new Date();
@@ -106,6 +123,9 @@ public class ReplyController {
             LOG.info("Fecha de creacion del reply: " + date);
             
             // Usuario que ha hecho la respuesta
+            LOG.info("Usuario: " + auth.getName());
+            List<UserModel> userslist = userService.listAllUsers();
+            
             for(UserModel user:userslist) {
     			LOG.info("Usuario que crea el reply: " + auth.getName());
                 if(user.getUsername().equals(auth.getName())) {
@@ -118,16 +138,17 @@ public class ReplyController {
             PostModel postModel = new PostModel();
             
             for(PostModel post:postslist) {
-    			LOG.info("Usuario que crea el reply: " + auth.getName());
-                if(post.getPost_id()==replyModel.getPost_id().getPost_id()) {
+                if(post.getPost_id()==post_id) {
+                	LOG.info("Postdfhbdf");
                 	postModel = post;
+                	replyModel.setPost_id(postModel);
                 }
             }
 			
             if (result.hasErrors()) {
-            	//LOG.info("replyModel User id: " + replyModel.getUser_id().getName());
             	LOG.info("Error al crear una reply");
-            	return "createreply";
+            	LOG.info(result.getFieldError());
+            	return "redirect:/listAllReplyPost?id=" + post_id;
             }else {
                 if(!img.isEmpty()) {
                     Path directory=Paths.get(".\\src\\main\\resources\\static\\img");
@@ -142,15 +163,13 @@ public class ReplyController {
                     }catch(IOException e) {
                         e.printStackTrace();
                     }
-                }else {
-                    
-                    replyModel.setImage("/img/michi.jpg");
                 }
-                replyModel.setPost_id(postModel);
+                
+                
                 replyModel.setDate(formatter.format(date));
                 replyModel.setUser_id(userModel);
                 replyService.addReply(replyModel);
             }
-            return "redirect:/listAllReplyPost?id=" + postModel.getPost_id();
+            return "redirect:/listAllReplyPost?id=" + post_id;
         }
 }
