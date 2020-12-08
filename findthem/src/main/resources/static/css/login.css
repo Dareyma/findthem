@@ -223,6 +223,20 @@
     display: block;
     margin-top: -155px;
   }
+
+  .login100-form-title2 {
+    font-family: Poppins-Regular;
+    font-size: 20px;
+    color: #555555;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  
+    width: 100%;
+    display: block;
+    margin-top: -250px;
+  }
   
   
   

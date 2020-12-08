@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class AccountController {
 	private UserService userService;
 	private static final Log LOG=LogFactory.getLog(ReplyController.class);
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/account")
 	public ModelAndView listPosts(Authentication auth) {
 		
@@ -70,7 +72,7 @@ public class AccountController {
 		return mav;
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/deleteAccount")
 	public String deleteAccount(Authentication auth) {
 		
@@ -113,6 +115,7 @@ public class AccountController {
 		return mav;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@PostMapping("/updateAccount")
 	public String updateAccount(Authentication auth, @Valid @ModelAttribute("user") UserModel userModel) {
 		

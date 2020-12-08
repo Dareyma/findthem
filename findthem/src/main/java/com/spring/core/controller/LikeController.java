@@ -6,11 +6,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,23 +38,23 @@ public class LikeController {
 	@Qualifier("likeServiceImpl")
 	private LikeService likeService;
 	
-	private static final Log LOG=LogFactory.getLog(ReplyController.class);
+	private static final Log LOG=LogFactory.getLog(LikeController.class);
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/changeLike")
-    public String changeLike(@RequestParam(name="post_id") int post_id, Model model, Authentication auth,
-    		@ModelAttribute("like") LikeModel likeModel) {
+    public String changeLike(@RequestParam(name="post_id") int post_id, Model model, Authentication auth) {
 			
 			UserModel userModel = new UserModel();
 			
+			LikeModel likeModel = new LikeModel();
+			
             List<UserModel> userslist = userService.listAllUsers();
-            
-            LOG.info("Entra10");
             
             // Usuario que le da like
             for(UserModel user:userslist) {
-    			LOG.info("Usuario que da like: " + auth.getName());
                 if(user.getUsername().equals(auth.getName())) {
                 	userModel = user;
+                	LOG.info("Usuario que da like: " + auth.getName() + " post: " + post_id);
                 }
             }
             
@@ -63,10 +63,9 @@ public class LikeController {
             List<PostModel> postslist = postService.listAllPosts();
             PostModel postModel = new PostModel();
             
-            for(PostModel post:postslist) {
-                if(post.getPost_id()==post_id) {
-                	LOG.info("Entra");
-                	postModel = post;
+            for(PostModel pm:postslist) {
+                if(pm.getPost_id()==post_id) {
+                	postModel = pm;
                 }
             }
             
@@ -74,20 +73,23 @@ public class LikeController {
             
             for (LikeModel like:likeslist) {
 				if (like.getPost_id().getPost_id()==postModel.getPost_id() && like.getUser_id().getId()==userModel.getId()) {
-					LOG.info("Entra4");
 					if (like.isEnabled()) {
+						likeModel = like;
 						likeModel.setEnabled(false);
-						LOG.info("Entra2");
+						likeService.updateLike(likeModel);
+						LOG.info("Like eliminado.");
 						return "redirect:/listAllReplyPost?id=" + post_id;
 					} else {
+						likeModel = like;
 						likeModel.setEnabled(true);
-						LOG.info("Entra3");
+						likeService.updateLike(likeModel);
+						LOG.info("Like establecido.");
 						return "redirect:/listAllReplyPost?id=" + post_id;
 					}
 				}
 			}
             
-            LOG.info("Entra5");
+            LOG.info("Creando like...");
             
             likeModel.setPost_id(postModel);
             likeModel.setUser_id(userModel);

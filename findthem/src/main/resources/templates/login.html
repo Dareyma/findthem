@@ -12,7 +12,9 @@
 	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../static/css/util.css" th:href="@{/css/util.css}">
-	<link rel="stylesheet" type="text/css" href="../static/css/login.css" th:href="@{/css/login.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css" th:href="@{/css/login.css}">
+    
+    <link rel="stylesheet" href="../static/fonts/css/font-awesome.min.css" th:href="@{/fonts/css/font-awesome.min.css}">
 <!--===============================================================================================-->
 </head>
 <body>
@@ -21,7 +23,7 @@
 			<div class="wrap-login100">
                 <div class="login100-form validate-form text-center">
                     <form th:action="@{/logincheck}" method="POST" class="w-full text-center ">
-                        <span class="login100-form-title p-b-50">
+                        <span class="login100-form-title p-b-20">
                             Acceder a la web
                         </span>
                         
@@ -48,8 +50,8 @@
 					<div class="w-full text-center p-t-27 p-b-50">
                         <form th:action="@{/logincheck}" method="POST" class="txt1">
                             <div>
-                                <input type="hidden" name="username" th:value="Invitado" >
-                               <input type="hidden" name="password" placeholder="Password" th:value="Invitado" >
+                               <input type="hidden" name="username" th:value="invitado" >
+                               <input type="hidden" name="password" placeholder="Password" th:value="invitado" >
                            </div>
                            <div>
                                <button class="txt2" type="submit">Entrar como invitado</button>

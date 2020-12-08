@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +33,12 @@ import com.spring.core.constants.Constantes;
 import com.spring.core.model.LikeModel;
 import com.spring.core.model.PostModel;
 import com.spring.core.model.ReplyModel;
+import com.spring.core.model.ReportModel;
 import com.spring.core.model.UserModel;
 import com.spring.core.service.LikeService;
 import com.spring.core.service.PostService;
 import com.spring.core.service.ReplyService;
+import com.spring.core.service.ReportService;
 import com.spring.core.service.UserService;
 
 
@@ -59,14 +62,20 @@ public class ReplyController {
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
+	@Autowired
+	@Qualifier("reportServiceImpl")
+	private ReportService reportService;
+	
 	private static final Log LOG=LogFactory.getLog(ReplyController.class);
 	
 	@GetMapping("/listAllReplyPost")
-	public ModelAndView listAllReplyPost(@RequestParam(name="id") int id) {
+	public ModelAndView listAllReplyPost(@RequestParam(name="id") int id, Authentication auth) {
 		
 		PostModel postModel = new PostModel();
 		
 		ReplyModel replyModel = new ReplyModel();
+		
+		UserModel userModel = new UserModel();
 		
 		ModelAndView mav = new ModelAndView(Constantes.REPLY_VIEW);
 		
@@ -80,13 +89,31 @@ public class ReplyController {
             }
         }
 		
+		List<UserModel> userslist = userService.listAllUsers();
+        
+        // Usuario que le da like
+        for(UserModel user:userslist) {
+            if(user.getUsername().equals(auth.getName())) {
+            	userModel = user;
+            }
+        }
+		
 		
 		List<LikeModel> likeslist = likeService.listAllLikes();
 		LikeModel likeModel = new LikeModel();
         
         for (LikeModel like:likeslist) {
-			if (like.getPost_id().getPost_id()==postModel.getPost_id()) {
+			if (like.getPost_id().getPost_id()==postModel.getPost_id() && like.getUser_id().getId()==userModel.getId()) {
 				likeModel = like;
+			}
+		}
+        
+        List<ReportModel> reportslist = reportService.listAllReports();
+        ReportModel reportModel = new ReportModel();
+        
+        for (ReportModel report:reportslist) {
+			if (report.getPost_id().getPost_id()==postModel.getPost_id() && report.getUser_id().getId()==userModel.getId()) {
+				reportModel = report;
 			}
 		}
 		
@@ -106,28 +133,30 @@ public class ReplyController {
 		mav.addObject("like", likeModel);
 		mav.addObject("respuestas", rlist);
 		mav.addObject("post", postModel);
+		mav.addObject("report", reportModel);
 		
 		return mav;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@PostMapping("/addReply")
     public String addReply(@RequestParam("imagen") MultipartFile img, @RequestParam(name="post_id") int post_id,
     		@Valid @ModelAttribute("reply") ReplyModel replyModel, BindingResult result,
             RedirectAttributes flash, Model model, Authentication auth) {
 			
 			UserModel userModel = new UserModel();
+			
+			ReplyModel rModel = new ReplyModel();
             
             // Fecha de creación del reply
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            LOG.info("Fecha de creacion del reply: " + date);
             
             // Usuario que ha hecho la respuesta
-            LOG.info("Usuario: " + auth.getName());
+            LOG.info("Usuario: " + auth.getName() + "Fecha: " + date);
             List<UserModel> userslist = userService.listAllUsers();
             
             for(UserModel user:userslist) {
-    			LOG.info("Usuario que crea el reply: " + auth.getName());
                 if(user.getUsername().equals(auth.getName())) {
                 	userModel = user;
                 }
@@ -137,14 +166,17 @@ public class ReplyController {
             List<PostModel> postslist = postService.listAllPosts();
             PostModel postModel = new PostModel();
             
-            for(PostModel post:postslist) {
-                if(post.getPost_id()==post_id) {
+            for(PostModel pm:postslist) {
+                if(pm.getPost_id()==post_id) {
                 	LOG.info("Postdfhbdf");
-                	postModel = post;
-                	replyModel.setPost_id(postModel);
+                	postModel = pm;
+                	rModel.setPost_id(postModel);
                 }
             }
-			
+            
+            rModel.setText(replyModel.getText());
+            
+			LOG.info("Result " + result);
             if (result.hasErrors()) {
             	LOG.info("Error al crear una reply");
             	LOG.info(result.getFieldError());
@@ -159,16 +191,16 @@ public class ReplyController {
                         Path rutaCompleta=Paths.get(ruta + "\\" + replyService.listAllReplys().size() + userModel.getUsername() + ".jpg");
                         LOG.info("Ruta de la imagen: "+rutaCompleta);
                         Files.write(rutaCompleta,bytes);
-                        replyModel.setImage("/img/"+ replyService.listAllReplys().size() + userModel.getUsername() +".jpg");     
+                        rModel.setImage("/img/"+ replyService.listAllReplys().size() + userModel.getUsername() +".jpg");     
                     }catch(IOException e) {
                         e.printStackTrace();
                     }
                 }
                 
                 
-                replyModel.setDate(formatter.format(date));
-                replyModel.setUser_id(userModel);
-                replyService.addReply(replyModel);
+                rModel.setDate(formatter.format(date));
+                rModel.setUser_id(userModel);
+                replyService.addReply(rModel);
             }
             return "redirect:/listAllReplyPost?id=" + post_id;
         }

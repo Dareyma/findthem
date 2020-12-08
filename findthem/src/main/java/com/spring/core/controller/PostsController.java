@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.core.constants.Constantes;
-import com.spring.core.entity.Post;
 import com.spring.core.model.PostModel;
 import com.spring.core.model.UserModel;
 import com.spring.core.service.LikeService;
@@ -64,6 +64,7 @@ public class PostsController {
 		return mav;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@PostMapping("/addPost")
     public String addPost(@RequestParam("imagen") MultipartFile img, @Valid @ModelAttribute("post") PostModel postModel, BindingResult result,
             RedirectAttributes flash, Model model, Authentication auth) {
@@ -121,34 +122,23 @@ public class PostsController {
         }
 	
 
-	@GetMapping("/createPost")
-    public ModelAndView createPost(){
-        ModelAndView mav=new ModelAndView(Constantes.POST_CREATE_VIEW);
-        mav.addObject("post",new Post());
-        return mav;
-    }
-	
-	@GetMapping("/editpost")
-    public ModelAndView editPost(@RequestParam(name="id") int id, PostModel postModel) {
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
+	@GetMapping("/formpost")
+    public ModelAndView formPost(@RequestParam(name="id") int id, Model Model) {
         
-		ModelAndView mav = new ModelAndView(Constantes.POST_CREATE_VIEW);
+		ModelAndView mav=new ModelAndView(Constantes.POST_CREATE_VIEW);
+		
+		PostModel postModel= new PostModel();
         
-        List<PostModel> postslist = postService.listAllPosts();
+        if (id!=-1) {
+			List<PostModel> list=postService.listAllPosts();
+			for(PostModel post:list) {
+				postModel = post;
+			}
+		}
         
-        for(PostModel post:postslist) {
-            if(post.getPost_id()==id) {
-            	postModel = post;
-            }
-        }
+        return mav.addObject("post", postModel);
         
-        if (id ==0) {
-            mav.addObject("post", new PostModel());
-        } else {
-        	LOG.info("*** LOG DE EDITAR POST: "+postModel.getTitle());
-            mav.addObject("post", postService.updatePost(postModel));
-            postService.removePost(id);
-        }
-        return mav;
     }
 	
 	@GetMapping("/deletepost")

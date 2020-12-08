@@ -48,7 +48,7 @@ public class RegisterController {
         userRole.setRole(role);
         userRole.setUser(user);
         userRolServiceImpl.addUser(userRole);
-        mav.setViewName("redirect:/");
+        mav.setViewName("redirect:/login");
         return mav;
     }
 }

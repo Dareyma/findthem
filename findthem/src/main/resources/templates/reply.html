@@ -16,6 +16,10 @@
   <!-- Custom styles for this template -->
   <link  rel="stylesheet" href="../static/css/blog-post.css" th:href="@{/css/blog-post.css}">
 
+  <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+
+  <link rel="stylesheet" href="../static/fonts/css/font-awesome.min.css" th:href="@{/fonts/css/font-awesome.min.css}">
+
 </head>
 
 <body>
@@ -38,10 +42,11 @@
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/account}">Mi cuenta</a>
+            <a class="nav-link" th:href="@{/account}"
+            sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">Mi cuenta</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a th:href="@{/login?logout}" class="nav-link"><i class="fa fa-sign-out"></i> Logout</a>
           </li>
         </ul>
       </div>
@@ -62,14 +67,30 @@
         <hr>
         <p class="lead" th:text="${post.text}"></p>
         <hr>
-          <a class="btn btn-outline-danger" id="btn-ventana" th:if="${like.enabled}"
-          th:href="@{/changeLike(post_id=${post.post_id})}">&#10084;</a>
-          <a class="btn btn-outline-danger" id="btn-ventana" th:if="not ${like.enabled}"
-            th:href="@{/changeLike(post_id=${post.post_id})}">&#9825;</a>
+
+          <!-- ####################### LIKE ########################## -->
+          
+          <a type="button" class="btn btn-danger" th:if="${like.enabled}"
+          th:href="@{/changeLike(post_id=${post.post_id})}" 
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-heart"></i> Me gusta</a>
+
+          <a class="btn btn-outline-danger " th:if="not ${like.enabled}"
+          th:href="@{/changeLike(post_id=${post.post_id})}"
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-heart"></i> Me gusta</a>
+          
+          <!-- ####################### REPORT ########################## -->
+
+          <a type="button" class="btn btn-outline-warning" th:if="not ${report.enabled}"
+          th:href="@{/changeReport(post_id=${post.post_id})}"
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
+
+          <a type="button" class="btn btn-warning" th:if="${report.enabled}"
+          th:href="@{/changeReport(post_id=${post.post_id})}" 
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
         <hr>
 
         <!-- Comments Form -->
-        <div class="card my-4">
+        <div class="card my-4" sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
           <h5 class="card-header">Comentar:</h5>
           <div class="card-body">
             <form  th:action="@{/addReply(post_id=${post.post_id})}" th:object="${reply}" method="post" enctype="multipart/form-data">
@@ -93,6 +114,7 @@
         </div>
 
         <!-- Single Comment -->
+        <h5 class="card-header">Respuestas:</h5>
         <div class="media mb-4" th:each="respuesta : ${respuestas}">
           <img class="d-flex mr-3 rounded-circle" src="" alt="">
           <div class="media-body">
@@ -100,7 +122,7 @@
             <p th:text="${respuesta.text}"></p>
             <img th:src="${respuesta.image}">
             <div class="card-footer">
-              <small class="text-muted" th:text="${respuesta.date}">ç</small>
+              <small class="text-muted" th:text="${respuesta.date}"></small>
             </div>
           </div>
         </div>
@@ -110,7 +132,7 @@
       <div class="col-md-4">
 
         <!-- Search Widget -->
-        <div class="card my-4">
+        <!-- <div class="card my-4">
           <h5 class="card-header">Buscar</h5>
           <div class="card-body">
             <div class="input-group">
@@ -120,7 +142,7 @@
               </span>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Categories Widget -->
         <div class="card my-4">
@@ -143,13 +165,13 @@
               <div class="col-lg-6">
                 <ul class="list-unstyled mb-0">
                   <li>
-                    <a href="#"></a>
+                    <a th:href="@{/listPostType(type=4)}">Donaciones</a>
+                  </li>
+                  <li>
+                    <a th:href="@{/listPostType(type=5)}">Protectoras</a>
                   </li>
                   <li>
                     <a th:href="@{/}">Todos los posts</a>
-                  </li>
-                  <li>
-                    <a href="#"></a>
                   </li>
                 </ul>
               </div>
@@ -158,10 +180,20 @@
         </div>
 
         <!-- Side Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">Side Widget</h5>
+        <div class="card my-4" sec:authorize="hasRole('ROLE_INVITADO')">
+          <h5 class="card-header text-danger text-center">&#x26A0; Información</h5>
           <div class="card-body">
-            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+            Si desea tener mayor interacción con la web puede registrarse accediendo al siguiente boton:<br><br>
+            <a th:href="@{/login?logout}" class="btn btn-outline-danger btn-block">Registrarse</a>
+          </div>
+        </div>
+
+        <div class="card my-4" sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+          <h5 class="card-header text-warning text-center"> Ayúdenos</h5>
+          <div class="card-body">
+            Puede hacer una donación para ayudar a mantener la web en el siguiente botón: 
+            <br><br>
+            <a href="https://www.paypal.me/Dareyma" target="_blank" class="btn btn-outline-warning btn-block">Donación</a>
           </div>
         </div>
 
