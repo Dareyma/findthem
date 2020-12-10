@@ -132,8 +132,11 @@ public class PostsController {
         
         if (id!=-1) {
 			List<PostModel> list=postService.listAllPosts();
+			
 			for(PostModel post:list) {
-				postModel = post;
+				if (post.getPost_id()==id) {
+					postModel = post;
+				}
 			}
 		}
         

@@ -129,13 +129,13 @@ public class AccountController {
             }
         }
 		
-        LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
+        //LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		userM.setEmail(userModel.getEmail());
 		userM.setName(userModel.getName());
 		userM.setSurname(userModel.getSurname());
 		userM.setUsername(userModel.getUsername());
 		userM.setPhone(userModel.getPhone());
-		LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
+		//LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		
 		userService.editUser(userM);
 		

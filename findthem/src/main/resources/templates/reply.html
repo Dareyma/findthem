@@ -38,8 +38,10 @@
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+          <li class="nav-item active" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <a class="nav-link" th:href="@{/users}">Admin
+              <span class="sr-only">(current)</span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" th:href="@{/account}"
@@ -87,10 +89,12 @@
           <a type="button" class="btn btn-warning" th:if="${report.enabled}"
           th:href="@{/changeReport(post_id=${post.post_id})}" 
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
+
+          <a type="button" class="btn btn-outline-primary"><i class="fa fa-commenting"></i> Responder</a>
         <hr>
 
         <!-- Comments Form -->
-        <div class="card my-4" sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+        <!-- <div class="card my-4" sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
           <h5 class="card-header">Comentar:</h5>
           <div class="card-body">
             <form  th:action="@{/addReply(post_id=${post.post_id})}" th:object="${reply}" method="post" enctype="multipart/form-data">
@@ -111,7 +115,7 @@
               <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
           </div>
-        </div>
+        </div> -->
 
         <!-- Single Comment -->
         <h5 class="card-header">Respuestas:</h5>

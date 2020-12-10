@@ -31,20 +31,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" th:href="@{/}">Home
+          <li class="nav-item active" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <a class="nav-link" th:href="@{/users}">Admin
               <span class="sr-only">(current)</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" th:href="@{/account}" 
             sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">Mi cuenta</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="#">Contactar</a>
           </li>
           <li class="nav-item">
           <a th:href="@{/login?logout}" class="nav-link"><i class="fa fa-sign-out"></i> Logout</a>
