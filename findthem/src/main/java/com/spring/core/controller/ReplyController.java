@@ -79,31 +79,18 @@ public class ReplyController {
 		
 		ModelAndView mav = new ModelAndView(Constantes.REPLY_VIEW);
 		
-		LOG.info("Buscando posts y replys con id_post: " + id);
-		
-		for(PostModel post:postService.listAllPosts()) {
-			LOG.debug("Post entra: ");
-			if(post.getPost_id()==id) {
-                postModel=post;
-                LOG.info("Post id: " + postModel.getPost_id());
-            }
-        }
-		
-		List<UserModel> userslist = userService.listAllUsers();
+		postModel = postService.findById(id);
+        LOG.info("Post id: " + postModel.getPost_id());
         
         // Usuario que le da like
-        for(UserModel user:userslist) {
-            if(user.getUsername().equals(auth.getName())) {
-            	userModel = user;
-            }
-        }
+		userModel = userService.findByUsername(auth.getName());
 		
 		
 		List<LikeModel> likeslist = likeService.listAllLikes();
 		LikeModel likeModel = new LikeModel();
         
         for (LikeModel like:likeslist) {
-			if (like.getPost_id().getPost_id()==postModel.getPost_id() && like.getUser_id().getId()==userModel.getId()) {
+			if (like.getPost().getPost_id()==postModel.getPost_id() && like.getUser().getId()==userModel.getId()) {
 				likeModel = like;
 			}
 		}
@@ -140,10 +127,12 @@ public class ReplyController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@PostMapping("/addReply")
-    public String addReply(@RequestParam("imagen") MultipartFile img, @RequestParam(name="post_id") int post_id,
+    public ModelAndView addReply(@RequestParam("imagen") MultipartFile img,
     		@Valid @ModelAttribute("reply") ReplyModel replyModel, BindingResult result,
             RedirectAttributes flash, Model model, Authentication auth) {
 			
+			ModelAndView mav = new ModelAndView();
+		
 			UserModel userModel = new UserModel();
 			
 			ReplyModel rModel = new ReplyModel();
@@ -154,33 +143,18 @@ public class ReplyController {
             
             // Usuario que ha hecho la respuesta
             LOG.info("Usuario: " + auth.getName() + "Fecha: " + date);
-            List<UserModel> userslist = userService.listAllUsers();
+            userModel = userService.findByUsername(auth.getName());
             
-            for(UserModel user:userslist) {
-                if(user.getUsername().equals(auth.getName())) {
-                	userModel = user;
-                }
-            }
-            
-            // Post  en el que se ha hecho la respuesta
-            List<PostModel> postslist = postService.listAllPosts();
-            PostModel postModel = new PostModel();
-            
-            for(PostModel pm:postslist) {
-                if(pm.getPost_id()==post_id) {
-                	LOG.info("Postdfhbdf");
-                	postModel = pm;
-                	rModel.setPost_id(postModel);
-                }
-            }
-            
-            rModel.setText(replyModel.getText());
-            
-			LOG.info("Result " + result);
             if (result.hasErrors()) {
             	LOG.info("Error al crear una reply");
             	LOG.info(result.getFieldError());
-            	return "redirect:/listAllReplyPost?id=" + post_id;
+            	//for (int i = 0; i < replyModel.; i++) {
+            		LOG.info("post: " + replyModel.getPost_id().getPost_id());
+				//}
+            	
+            	mav.setViewName("redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id());
+            	//return "redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id(); //PostModel post_id
+            	
             }else {
                 if(!img.isEmpty()) {
                     Path directory=Paths.get(".\\src\\main\\resources\\static\\img");
@@ -199,9 +173,45 @@ public class ReplyController {
                 
                 
                 rModel.setDate(formatter.format(date));
+                rModel.setPost_id(replyModel.getPost_id());
+                rModel.setText(replyModel.getText());
                 rModel.setUser_id(userModel);
+                
                 replyService.addReply(rModel);
+                mav.setViewName("redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id());
             }
-            return "redirect:/listAllReplyPost?id=" + post_id;
+            
+            return mav;
         }
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
+	@GetMapping("/newreply")
+    public String formPost(@RequestParam(name="id") int id, Model model) {
+        
+		ReplyModel replyModel = new ReplyModel();
+		PostModel postModel = new PostModel();
+		
+		postModel = postService.findById(id);
+		replyModel.setPost_id(postModel);
+		
+		model.addAttribute("reply", replyModel);
+		
+		return Constantes.REPLY_CREATE;
+		
+		
+		/*ModelAndView mav=new ModelAndView(Constantes.REPLY_CREATE);
+		
+		ReplyModel replyModel= new ReplyModel();
+		PostModel postModel= new PostModel();
+		
+		postModel = postService.findById(id);
+		replyModel.setPost_id(postModel);
+		mav.addObject("reply", replyModel);
+		
+		LOG.info("Modelo: " + replyModel.getPost_id().getPost_id());
+		LOG.info("Texto: " + mav);
+		
+		return mav;*/
+        
+    }
 }

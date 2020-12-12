@@ -23,5 +23,7 @@ public interface UserService {
 	    //transformar modelo a entidad
 	    public abstract UserModel transform(User user);
 
+		UserModel findByUsername(String username);
+
 		
 }

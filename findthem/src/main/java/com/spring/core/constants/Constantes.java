@@ -9,6 +9,7 @@ public class Constantes {
 	public static final String POST_CREATE_VIEW = "createpost";
 	
 	public static final String REPLY_VIEW = "reply";
+	public static final String REPLY_CREATE = "createreply";
 	
 	public static final String LOGIN_VIEW = "login";
 	public static final String REGISTER_VIEW = "register";

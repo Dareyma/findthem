@@ -15,9 +15,19 @@ public interface LikeService {
 	
 	public abstract int removeLike(int id);
 	
+	//LikeModel findByUser_idAndPost_id(int id, int id2);
+	
 	//transformar entidad a modelo
     public abstract Like transform(LikeModel likeModel);
 
     //transformar modelo a entidad
     public abstract LikeModel transform(Like like);
+
+	LikeModel findByUserAndPost(int id, int id2);
+
+	
+
+	
+
+	
 }

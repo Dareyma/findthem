@@ -90,7 +90,9 @@
           th:href="@{/changeReport(post_id=${post.post_id})}" 
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
 
-          <a type="button" class="btn btn-outline-primary"><i class="fa fa-commenting"></i> Responder</a>
+          <a type="button" class="btn btn-outline-primary"
+          th:href="@{/newreply(id=${post.post_id})}" 
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-commenting"></i> Responder</a>
         <hr>
 
         <!-- Comments Form -->

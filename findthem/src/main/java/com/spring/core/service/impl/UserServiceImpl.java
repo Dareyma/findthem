@@ -87,6 +87,12 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		List<GrantedAuthority> authorities = buildAuthorities(user.getUser_Role());	
 		return buildUser(user, authorities);
 	}
+    
+    @Override
+    public UserModel findByUsername(String username) {
+		com.spring.core.entity.User userResponse = userRepository.findByUsername(username);
+		return transform(userResponse);
+    }
 
     @Override
 	public com.spring.core.entity.User addUser(com.spring.core.entity.User user) {

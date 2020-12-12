@@ -2,6 +2,7 @@ package com.spring.core.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,12 @@ public class LikeServiceImpl implements LikeService{
     public int removeLike(int id) {
 		likeRepository.deleteById(id);
         return 0;
+    }
+	
+	@Override
+    public LikeModel findByUserAndPost(int id, int id2) {
+		Optional<Like> likeResponse = likeRepository.findById(id);
+		return transform(likeResponse.get());
     }
 	
 	@Override

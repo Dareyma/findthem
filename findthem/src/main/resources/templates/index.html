@@ -112,11 +112,11 @@
               <div class="card-footer">
                 <small class="text-muted" th:text="${post.user_id.username}"></small>
                 <small class="text-muted" th:text="${post.date}"></small>
-                <div th:each=" like : ${likes}">
+                <!-- <div th:each=" like : ${likes}">
                   <div th:if="${like.post_id == post.post_id}">
-                    <small class="text-muted" th:if="${like.ennable}">&#10084;</small>
+                    <small class="text-muted" th:if="${like.enabled}">&#10084;</small>
                   </div>
-                </div>
+                </div> -->
                 <hr>
                 <a class="btn btn-outline-danger btn-block" data-toggle="modal" th:onclick="|confirmDelete('/deletepost?id=${post.post_id}')|" sec:authorize="hasRole('ROLE_ADMIN')">
                   <i class="fa fa-trash mr-1"></i>Eliminar</a>

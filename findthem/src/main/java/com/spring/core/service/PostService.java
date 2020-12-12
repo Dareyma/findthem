@@ -14,10 +14,14 @@ public interface PostService {
 	public abstract PostModel updatePost(PostModel postModel);
 	
 	public abstract int removePost(int id);
+	
+	PostModel findById(int id);
 
 	//transformar entidad a modelo
     public abstract Post transform(PostModel postModel);
 
     //transformar modelo a entidad
     public abstract PostModel transform(Post post);
+
+	
 }

@@ -45,34 +45,20 @@ public class LikeController {
     public String changeLike(@RequestParam(name="post_id") int post_id, Model model, Authentication auth) {
 			
 			UserModel userModel = new UserModel();
-			
+			LOG.info("Usuario que da like: " + auth.getName() + " post: " + post_id);
+			userModel = userService.findByUsername(auth.getName());
+				
 			LikeModel likeModel = new LikeModel();
 			
-            List<UserModel> userslist = userService.listAllUsers();
-            
-            // Usuario que le da like
-            for(UserModel user:userslist) {
-                if(user.getUsername().equals(auth.getName())) {
-                	userModel = user;
-                	LOG.info("Usuario que da like: " + auth.getName() + " post: " + post_id);
-                }
-            }
-            
-			
             // Post que le dan like
-            List<PostModel> postslist = postService.listAllPosts();
             PostModel postModel = new PostModel();
+            postModel = postService.findById(post_id);
             
-            for(PostModel pm:postslist) {
-                if(pm.getPost_id()==post_id) {
-                	postModel = pm;
-                }
-            }
             
             List<LikeModel> likeslist = likeService.listAllLikes();
             
             for (LikeModel like:likeslist) {
-				if (like.getPost_id().getPost_id()==postModel.getPost_id() && like.getUser_id().getId()==userModel.getId()) {
+				if (like.getPost().getPost_id()==postModel.getPost_id() && like.getUser().getId()==userModel.getId()) {
 					if (like.isEnabled()) {
 						likeModel = like;
 						likeModel.setEnabled(false);
@@ -91,13 +77,30 @@ public class LikeController {
             
             LOG.info("Creando like...");
             
-            likeModel.setPost_id(postModel);
-            likeModel.setUser_id(userModel);
+            likeModel.setPost(postModel);
+            likeModel.setUser(userModel);
             likeModel.setEnabled(true);
             
             likeService.addLike(likeModel);
             
             return "redirect:/listAllReplyPost?id=" + post_id;
+            
+        //     LOG.info("papaya");
+        //     likeModel = likeService.findByUserAndPost(userModel.getId(), post_id);
+        //     LOG.info("papaya");
+            
+        //     if (likeModel!=null) {
+        //     	if (likeModel.isEnabled()) {
+    	// 			likeModel.setEnabled(false);
+    	// 			likeService.updateLike(likeModel);
+    	// 			LOG.info("Like eliminado.");
+    	// 			return "redirect:/listAllReplyPost?id=" + post_id;
+    	// 		} else {
+    	// 			likeModel.setEnabled(true);
+    	// 			likeService.updateLike(likeModel);
+    	// 			LOG.info("Like establecido.");
+    	// 			return "redirect:/listAllReplyPost?id=" + post_id;
+    	// 		}
+		// 	}
         }
-	
 }

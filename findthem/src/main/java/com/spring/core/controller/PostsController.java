@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -73,14 +72,7 @@ public class PostsController {
 			
 			// Usuario que ha creado el post
             LOG.info("Usuario: " + auth.getName());
-            List<UserModel> userslist = userService.listAllUsers();
-            
-            for(UserModel user:userslist) {
-    			LOG.info("Usuario que crea el post: " + auth.getName());
-                if(user.getUsername().equals(auth.getName())) {
-                	userModel = user;
-                }
-            }
+            userModel = userService.findByUsername(auth.getName());
             
 			
 			LOG.info("Prueba: " + postModel.getPost_id());
@@ -131,13 +123,7 @@ public class PostsController {
 		PostModel postModel= new PostModel();
         
         if (id!=-1) {
-			List<PostModel> list=postService.listAllPosts();
-			
-			for(PostModel post:list) {
-				if (post.getPost_id()==id) {
-					postModel = post;
-				}
-			}
+			postModel = postService.findById(id);
 		}
         
         return mav.addObject("post", postModel);

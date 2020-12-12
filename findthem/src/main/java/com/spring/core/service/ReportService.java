@@ -15,9 +15,13 @@ public interface ReportService {
 	
 	public abstract int removeReport(int id);
 	
+	ReportModel findById(int id);
+	
 	//transformar entidad a modelo
     public abstract Report transform(ReportModel reportModel);
 
     //transformar modelo a entidad
     public abstract ReportModel transform(Report report);
+
+	
 }

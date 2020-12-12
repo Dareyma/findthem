@@ -45,25 +45,15 @@ public class AccountController {
 		
 		UserModel userModel = new UserModel();
 		
-		//LOG.info("Usuario: " + auth.getName());
-        List<UserModel> userslist = userService.listAllUsers();
-        
-        for(UserModel user:userslist) {
-            if(user.getUsername().equals(auth.getName())) {
-            	userModel = user;
-            }
-        }
+		userModel = userService.findByUsername(auth.getName());
 		
 		List<PostModel> postslist = postService.listAllPosts();
 		
 		List<PostModel> plist = new ArrayList<PostModel>();
 		
 		for(PostModel post:postslist) {
-			//LOG.info("Post: " + post.getUser_id().getId());
-			//LOG.info("Model: " + userModel.getId());
             if(post.getUser_id().getId()==userModel.getId()) {
                 plist.add(post);
-                LOG.info("Añadida: " + post);
             }
         }
 		mav.addObject("user", userModel);
@@ -78,17 +68,11 @@ public class AccountController {
 		
 		UserModel userM = new UserModel();
 		
-        List<UserModel> userslist = userService.listAllUsers();
-        
-        for(UserModel user:userslist) {
-            if(user.getUsername().equals(auth.getName())) {
-            	userM = user;
-            }
-        }
+		userM = userService.findByUsername(auth.getName());
 		
-        LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
+        //LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		userM.setEnabled(false);
-		LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
+		//LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		
 		userService.editUser(userM);
 		
@@ -102,13 +86,7 @@ public class AccountController {
 		
 		UserModel userM = new UserModel();
 		
-        List<UserModel> userslist = userService.listAllUsers();
-        
-        for(UserModel user:userslist) {
-            if(user.getUsername().equals(auth.getName())) {
-            	userM = user;
-            }
-        }
+		userM = userService.findByUsername(auth.getName());
         
         mav.addObject("user", userM);
 		
@@ -121,21 +99,13 @@ public class AccountController {
 		
 		UserModel userM = new UserModel();
 		
-        List<UserModel> userslist = userService.listAllUsers();
-        
-        for(UserModel user:userslist) {
-            if(user.getUsername().equals(auth.getName())) {
-            	userM = user;
-            }
-        }
+		userM = userService.findByUsername(auth.getName());
 		
-        //LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		userM.setEmail(userModel.getEmail());
 		userM.setName(userModel.getName());
 		userM.setSurname(userModel.getSurname());
 		userM.setUsername(userModel.getUsername());
 		userM.setPhone(userModel.getPhone());
-		//LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		
 		userService.editUser(userM);
 		

@@ -2,6 +2,7 @@ package com.spring.core.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,12 @@ public class ReportServiceImpl implements ReportService {
     public int removeReport(int id) {
 		reportRepository.deleteById(id);
         return 0;
+    }
+	
+	@Override
+    public ReportModel findById(int id) {
+		Optional<Report> reportResponse = reportRepository.findById(id);
+		return transform(reportResponse.get());
     }
 	
 	@Override
