@@ -6,20 +6,20 @@ public class ReportModel {
 	
 	private boolean enabled;
 	
-	private UserModel user_id;
+	private UserModel user;
 	
-	private PostModel post_id;
+	private PostModel post;
 
 	public ReportModel() {
 		
 	}
 
-	public ReportModel(int id_report, boolean enabled, UserModel user_id, PostModel post_id) {
+	public ReportModel(int id_report, boolean enabled, UserModel user, PostModel post) {
 		super();
 		this.id_report = id_report;
 		this.enabled = enabled;
-		this.user_id = user_id;
-		this.post_id = post_id;
+		this.user = user;
+		this.post = post;
 	}
 
 	public int getId_report() {
@@ -38,21 +38,20 @@ public class ReportModel {
 		this.enabled = enabled;
 	}
 
-	public UserModel getUser_id() {
-		return user_id;
+	public UserModel getUser() {
+		return user;
 	}
 
-	public void setUser_id(UserModel user_id) {
-		this.user_id = user_id;
+	public void setUser(UserModel user) {
+		this.user = user;
 	}
 
-	public PostModel getPost_id() {
-		return post_id;
+	public PostModel getPost() {
+		return post;
 	}
 
-	public void setPost_id(PostModel post_id) {
-		this.post_id = post_id;
-	}
-	
+	public void setPost(PostModel post) {
+		this.post = post;
+	}	
 	
 }

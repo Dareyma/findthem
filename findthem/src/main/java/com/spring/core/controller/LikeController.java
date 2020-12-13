@@ -1,7 +1,5 @@
 package com.spring.core.controller;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class LikeController {
 	private LikeService likeService;
 	
 	private static final Log LOG=LogFactory.getLog(LikeController.class);
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/changeLike")
     public String changeLike(@RequestParam(name="post_id") int post_id, Model model, Authentication auth) {
@@ -47,60 +45,40 @@ public class LikeController {
 			UserModel userModel = new UserModel();
 			LOG.info("Usuario que da like: " + auth.getName() + " post: " + post_id);
 			userModel = userService.findByUsername(auth.getName());
-				
-			LikeModel likeModel = new LikeModel();
 			
             // Post que le dan like
             PostModel postModel = new PostModel();
             postModel = postService.findById(post_id);
             
+            LikeModel likeModel = new LikeModel();
             
-            List<LikeModel> likeslist = likeService.listAllLikes();
+            likeModel = likeService.findByUserAndPost(postModel, userModel);
             
-            for (LikeModel like:likeslist) {
-				if (like.getPost().getPost_id()==postModel.getPost_id() && like.getUser().getId()==userModel.getId()) {
-					if (like.isEnabled()) {
-						likeModel = like;
-						likeModel.setEnabled(false);
-						likeService.updateLike(likeModel);
-						LOG.info("Like eliminado.");
-						return "redirect:/listAllReplyPost?id=" + post_id;
-					} else {
-						likeModel = like;
-						likeModel.setEnabled(true);
-						likeService.updateLike(likeModel);
-						LOG.info("Like establecido.");
-						return "redirect:/listAllReplyPost?id=" + post_id;
-					}
-				}
+            if (likeModel!=null) {
+            	if (likeModel.isEnabled()) {
+    				likeModel.setEnabled(false);
+    				likeService.updateLike(likeModel);
+    				LOG.info("Like eliminado.");
+    				return "redirect:/listAllReplyPost?id=" + post_id;
+    			} else {
+    				likeModel.setEnabled(true);
+    				likeService.updateLike(likeModel);
+    				LOG.info("Like establecido.");
+    				return "redirect:/listAllReplyPost?id=" + post_id;
+    			}
 			}
             
             LOG.info("Creando like...");
             
-            likeModel.setPost(postModel);
-            likeModel.setUser(userModel);
-            likeModel.setEnabled(true);
+            LikeModel likeM = new LikeModel();
             
-            likeService.addLike(likeModel);
+            likeM.setPost(postModel);
+            likeM.setUser(userModel);
+            likeM.setEnabled(true);
+            
+            likeService.addLike(likeM);
             
             return "redirect:/listAllReplyPost?id=" + post_id;
             
-        //     LOG.info("papaya");
-        //     likeModel = likeService.findByUserAndPost(userModel.getId(), post_id);
-        //     LOG.info("papaya");
-            
-        //     if (likeModel!=null) {
-        //     	if (likeModel.isEnabled()) {
-    	// 			likeModel.setEnabled(false);
-    	// 			likeService.updateLike(likeModel);
-    	// 			LOG.info("Like eliminado.");
-    	// 			return "redirect:/listAllReplyPost?id=" + post_id;
-    	// 		} else {
-    	// 			likeModel.setEnabled(true);
-    	// 			likeService.updateLike(likeModel);
-    	// 			LOG.info("Like establecido.");
-    	// 			return "redirect:/listAllReplyPost?id=" + post_id;
-    	// 		}
-		// 	}
         }
 }

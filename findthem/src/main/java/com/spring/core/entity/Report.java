@@ -28,23 +28,23 @@ public class Report {
 	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
-	private User user_id;
+	private User user;
 	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name="post_id")
-	private Post post_id;
+	private Post post;
 
 	public Report() {
 		
 	}
 
-	public Report(int id_report, boolean enabled, User user_id, Post post_id) {
+	public Report(int id_report, boolean enabled, User user, Post post) {
 		super();
 		this.id_report = id_report;
 		this.enabled = enabled;
-		this.user_id = user_id;
-		this.post_id = post_id;
+		this.user = user;
+		this.post = post;
 	}
 
 	public int getId_report() {
@@ -63,20 +63,20 @@ public class Report {
 		this.enabled = enabled;
 	}
 
-	public User getUser_id() {
-		return user_id;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUser_id(User user_id) {
-		this.user_id = user_id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Post getPost_id() {
-		return post_id;
+	public Post getPost() {
+		return post;
 	}
 
-	public void setPost_id(Post post_id) {
-		this.post_id = post_id;
+	public void setPost(Post post) {
+		this.post = post;
 	}
 	
 }

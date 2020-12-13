@@ -3,7 +3,11 @@ package com.spring.core.service;
 import java.util.List;
 
 import com.spring.core.entity.Like;
+import com.spring.core.entity.Post;
+import com.spring.core.entity.User;
 import com.spring.core.model.LikeModel;
+import com.spring.core.model.PostModel;
+import com.spring.core.model.UserModel;
 
 public interface LikeService {
 	
@@ -23,7 +27,17 @@ public interface LikeService {
     //transformar modelo a entidad
     public abstract LikeModel transform(Like like);
 
-	LikeModel findByUserAndPost(int id, int id2);
+	//LikeModel findByUserAndPost(UserModel id, PostModel id2);
+
+	LikeModel findByUserAndPost(PostModel postModel, UserModel userModel);
+
+	Post transform(PostModel postModel);
+
+	PostModel transform(Post post);
+
+	UserModel transform(User user);
+
+	User transform(UserModel userModel);
 
 	
 

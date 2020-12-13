@@ -99,7 +99,7 @@ public class ReplyController {
         ReportModel reportModel = new ReportModel();
         
         for (ReportModel report:reportslist) {
-			if (report.getPost_id().getPost_id()==postModel.getPost_id() && report.getUser_id().getId()==userModel.getId()) {
+			if (report.getPost().getPost_id()==postModel.getPost_id() && report.getUser().getId()==userModel.getId()) {
 				reportModel = report;
 			}
 		}
@@ -186,32 +186,20 @@ public class ReplyController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/newreply")
-    public String formPost(@RequestParam(name="id") int id, Model model) {
-        
-		ReplyModel replyModel = new ReplyModel();
-		PostModel postModel = new PostModel();
-		
-		postModel = postService.findById(id);
-		replyModel.setPost_id(postModel);
-		
-		model.addAttribute("reply", replyModel);
-		
-		return Constantes.REPLY_CREATE;
+    public ModelAndView formPost(@RequestParam(name="id") int id, Model model) {
 		
 		
-		/*ModelAndView mav=new ModelAndView(Constantes.REPLY_CREATE);
+		ModelAndView mav=new ModelAndView(Constantes.REPLY_CREATE);
 		
 		ReplyModel replyModel= new ReplyModel();
 		PostModel postModel= new PostModel();
 		
 		postModel = postService.findById(id);
 		replyModel.setPost_id(postModel);
+		mav.addObject("post", postModel);
 		mav.addObject("reply", replyModel);
-		
-		LOG.info("Modelo: " + replyModel.getPost_id().getPost_id());
-		LOG.info("Texto: " + mav);
-		
-		return mav;*/
+
+		return mav;
         
     }
 }
