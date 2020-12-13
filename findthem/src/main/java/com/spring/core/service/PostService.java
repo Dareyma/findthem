@@ -3,7 +3,9 @@ package com.spring.core.service;
 import java.util.List;
 
 import com.spring.core.entity.Post;
+import com.spring.core.entity.User;
 import com.spring.core.model.PostModel;
+import com.spring.core.model.UserModel;
 
 public interface PostService {
 	
@@ -22,6 +24,12 @@ public interface PostService {
 
     //transformar modelo a entidad
     public abstract PostModel transform(Post post);
+
+	User transform(UserModel userModel);
+
+	UserModel transform(User user);
+
+	List<PostModel> findAllByUser(UserModel userModel);
 
 	
 }

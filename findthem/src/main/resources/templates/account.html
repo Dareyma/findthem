@@ -124,7 +124,7 @@
                                     <p class="card-text" th:text="${post.text}"></p>
                                 </div>
                                 <div class="card-footer m-b-1">
-                                    <small class="text-muted" th:text="${post.user_id.username}"></small>
+                                    <small class="text-muted" th:text="${post.user.username}"></small>
                                     <small class="text-muted" th:text="${post.date}"></small>
                                     <hr>
                                     <a class="btn btn-outline-info btn-block" th:href="@{/formpost(id=${post.post_id})}"><i class="fa fa-pencil mr-1"></i>Editar</a>

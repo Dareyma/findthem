@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,36 +84,13 @@ public class ReplyController {
         // Usuario que le da like
 		userModel = userService.findByUsername(auth.getName());
 		
-		
-		List<LikeModel> likeslist = likeService.listAllLikes();
 		LikeModel likeModel = new LikeModel();
+		likeModel = likeService.findByUserAndPost(postModel, userModel);
+		
+		ReportModel reportModel = new ReportModel();
+        reportModel = reportService.findByUserAndPost(postModel, userModel);
         
-        for (LikeModel like:likeslist) {
-			if (like.getPost().getPost_id()==postModel.getPost_id() && like.getUser().getId()==userModel.getId()) {
-				likeModel = like;
-			}
-		}
-        
-        List<ReportModel> reportslist = reportService.listAllReports();
-        ReportModel reportModel = new ReportModel();
-        
-        for (ReportModel report:reportslist) {
-			if (report.getPost().getPost_id()==postModel.getPost_id() && report.getUser().getId()==userModel.getId()) {
-				reportModel = report;
-			}
-		}
-		
-		
-		List<ReplyModel> replyslist = replyService.listAllReplys();
-		
-		List<ReplyModel> rlist = new ArrayList<ReplyModel>();
-		
-		for(ReplyModel reply:replyslist) {
-            if(reply.getPost_id().getPost_id()==id) {
-                rlist.add(reply);
-                //LOG.info("Añadida: " + reply);
-            }
-        }
+        List<ReplyModel> rlist = replyService.findAllByPost(postModel);
 		
 		mav.addObject("reply", replyModel);
 		mav.addObject("like", likeModel);
@@ -127,11 +103,12 @@ public class ReplyController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@PostMapping("/addReply")
-    public ModelAndView addReply(@RequestParam("imagen") MultipartFile img,
+    public String addReply(@RequestParam("imagen") MultipartFile img, @RequestParam("post") int post_id,
     		@Valid @ModelAttribute("reply") ReplyModel replyModel, BindingResult result,
+			// @ModelAttribute("reply") ReplyModel replyModel,
             RedirectAttributes flash, Model model, Authentication auth) {
 			
-			ModelAndView mav = new ModelAndView();
+			//ModelAndView mav = new ModelAndView();
 		
 			UserModel userModel = new UserModel();
 			
@@ -145,43 +122,41 @@ public class ReplyController {
             LOG.info("Usuario: " + auth.getName() + "Fecha: " + date);
             userModel = userService.findByUsername(auth.getName());
             
+            PostModel postModel = postService.findById(post_id);
+            replyModel.setPost(postModel);
+            
             if (result.hasErrors()) {
             	LOG.info("Error al crear una reply");
             	LOG.info(result.getFieldError());
-            	//for (int i = 0; i < replyModel.; i++) {
-            		LOG.info("post: " + replyModel.getPost_id().getPost_id());
-				//}
+            	LOG.info("post: " + replyModel.getPost().getPost_id());
             	
-            	mav.setViewName("redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id());
-            	//return "redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id(); //PostModel post_id
+            	return "redirect:/listAllReplyPost?id=" + postModel.getPost_id(); //PostModel post_id
             	
             }else {
-                if(!img.isEmpty()) {
-                    Path directory=Paths.get(".\\src\\main\\resources\\static\\img");
-                    String ruta=directory.toFile().getAbsolutePath();
-                    LOG.info("ruta"+ruta);
-                    try {
-                        byte[] bytes=img.getBytes();
-                        Path rutaCompleta=Paths.get(ruta + "\\" + replyService.listAllReplys().size() + userModel.getUsername() + ".jpg");
-                        LOG.info("Ruta de la imagen: "+rutaCompleta);
-                        Files.write(rutaCompleta,bytes);
-                        rModel.setImage("/img/"+ replyService.listAllReplys().size() + userModel.getUsername() +".jpg");     
-                    }catch(IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                
-                
-                rModel.setDate(formatter.format(date));
-                rModel.setPost_id(replyModel.getPost_id());
-                rModel.setText(replyModel.getText());
-                rModel.setUser_id(userModel);
-                
-                replyService.addReply(rModel);
-                mav.setViewName("redirect:/listAllReplyPost?id=" + replyModel.getPost_id().getPost_id());
-            }
+		        if(!img.isEmpty()) {
+		            Path directory=Paths.get(".\\src\\main\\resources\\static\\img");
+		            String ruta=directory.toFile().getAbsolutePath();
+		            LOG.info("ruta"+ruta);
+		            try {
+		                byte[] bytes=img.getBytes();
+		                Path rutaCompleta=Paths.get(ruta + "\\" + replyService.listAllReplys().size() + userModel.getUsername() + ".jpg");
+		                LOG.info("Ruta de la imagen: "+rutaCompleta);
+		                Files.write(rutaCompleta,bytes);
+		                rModel.setImage("/img/"+ replyService.listAllReplys().size() + userModel.getUsername() +".jpg");     
+		            }catch(IOException e) {
+		                e.printStackTrace();
+		            }
+		       	}
+		    }
             
-            return mav;
+	            rModel.setDate(formatter.format(date));
+	            rModel.setPost(postModel);
+	            rModel.setText(replyModel.getText());
+	            rModel.setUser(userModel);
+	            
+	            replyService.addReply(rModel);
+	            return "redirect:/listAllReplyPost?id=" + postModel.getPost_id(); //PostModel post_id
+
         }
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
@@ -195,7 +170,7 @@ public class ReplyController {
 		PostModel postModel= new PostModel();
 		
 		postModel = postService.findById(id);
-		replyModel.setPost_id(postModel);
+		replyModel.setPost(postModel);
 		mav.addObject("post", postModel);
 		mav.addObject("reply", replyModel);
 

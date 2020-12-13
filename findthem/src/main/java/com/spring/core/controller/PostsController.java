@@ -107,7 +107,7 @@ public class PostsController {
                     
                     postModel.setImage("/img/michi.jpg");
                 }
-                postModel.setUser_id(userModel);
+                postModel.setUser(userModel);
                 postService.addPost(postModel);
             }
             return "redirect:/";

@@ -1,6 +1,5 @@
 package com.spring.core.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -47,15 +46,8 @@ public class AccountController {
 		
 		userModel = userService.findByUsername(auth.getName());
 		
-		List<PostModel> postslist = postService.listAllPosts();
+		List<PostModel> plist = postService.findAllByUser(userModel);
 		
-		List<PostModel> plist = new ArrayList<PostModel>();
-		
-		for(PostModel post:postslist) {
-            if(post.getUser_id().getId()==userModel.getId()) {
-                plist.add(post);
-            }
-        }
 		mav.addObject("user", userModel);
 		mav.addObject("posts", plist);
 		
@@ -72,13 +64,14 @@ public class AccountController {
 		
         //LOG.info("Modelo antes: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
 		userM.setEnabled(false);
-		//LOG.info("Modelo después: " + userM.isEnabled() + "Usuario: " + userM.getUsername() + "id: " + userM.getId());
+		LOG.info("Se ha deshabilitado la cuenta: " + userM.getUsername());
 		
 		userService.editUser(userM);
 		
 		return "redirect:/login?logout";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROTECTORA') or hasRole('ROLE_USER')")
 	@GetMapping("/editAccount")
 	public ModelAndView editAccount(Authentication auth) {
 		

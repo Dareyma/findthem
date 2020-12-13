@@ -61,7 +61,7 @@
       <!-- Post Content Column -->
       <div class="col-lg-8">
         <h1 class="mt-4" th:text="${post.title}"></h1>
-        <p class="lead"> by <a href="#" th:text="${post.user_id.username}"></a> </p>
+        <p class="lead"> by <a href="#" th:text="${post.user.username}"></a> </p>
         <hr>
         <p th:text="${post.date}"> </p>
         <hr>
@@ -71,7 +71,7 @@
         <hr>
 
           <!-- ####################### LIKE ########################## -->
-          
+        <a th:if="${like != null}">  
           <a type="button" class="btn btn-danger" th:if="${like.enabled}"
           th:href="@{/changeLike(post_id=${post.post_id})}" 
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-heart"></i> Me gusta</a>
@@ -79,9 +79,14 @@
           <a class="btn btn-outline-danger " th:if="not ${like.enabled}"
           th:href="@{/changeLike(post_id=${post.post_id})}"
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-heart"></i> Me gusta</a>
-          
+        </a>
+        <a th:if="${like == null}">
+          <a class="btn btn-outline-danger"
+          th:href="@{/changeLike(post_id=${post.post_id})}"
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-heart"></i> Me gusta</a>
+        </a>
           <!-- ####################### REPORT ########################## -->
-
+        <a th:if="${report != null}"> 
           <a type="button" class="btn btn-outline-warning" th:if="not ${report.enabled}"
           th:href="@{/changeReport(post_id=${post.post_id})}"
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
@@ -89,7 +94,14 @@
           <a type="button" class="btn btn-warning" th:if="${report.enabled}"
           th:href="@{/changeReport(post_id=${post.post_id})}" 
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
+        </a>
+        <a th:if="${report == null}">
+          <a type="button" class="btn btn-warning"
+          th:href="@{/changeReport(post_id=${post.post_id})}" 
+          sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-warning"></i> Reportar</a>
+        </a>
 
+        <!-- ####################### REPLY ########################## -->
           <a type="button" class="btn btn-outline-primary"
           th:href="@{/newreply(id=${post.post_id})}" 
           sec:authorize="hasRole('ROLE_PROTECTORA') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"><i class="fa fa-commenting"></i> Responder</a>
@@ -124,7 +136,7 @@
         <div class="media mb-4" th:each="respuesta : ${respuestas}">
           <img class="d-flex mr-3 rounded-circle" src="" alt="">
           <div class="media-body">
-            <h5 class="mt-0" th:text="${respuesta.user_id.username}"></h5>
+            <h5 class="mt-0" th:text="${respuesta.user.username}"></h5>
             <p th:text="${respuesta.text}"></p>
             <img th:src="${respuesta.image}">
             <div class="card-footer">

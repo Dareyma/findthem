@@ -110,7 +110,7 @@
                 <p class="card-text" th:text="${post.text}"></p>
               </div>
               <div class="card-footer">
-                <small class="text-muted" th:text="${post.user_id.username}"></small>
+                <small class="text-muted" th:text="${post.user.username}"></small>
                 <small class="text-muted" th:text="${post.date}"></small>
                 <!-- <div th:each=" like : ${likes}">
                   <div th:if="${like.post_id == post.post_id}">

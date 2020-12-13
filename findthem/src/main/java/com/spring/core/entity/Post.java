@@ -42,14 +42,14 @@ public class Post {
 	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
-	private User user_id;
+	private User user;
 
 	public Post() {
 		
 	}
 
 	public Post(int post_id, String title, String text, @NotNull int type, String image, String location, String date,
-			User user_id) {
+			User user) {
 		super();
 		this.post_id = post_id;
 		this.title = title;
@@ -58,7 +58,7 @@ public class Post {
 		this.image = image;
 		this.location = location;
 		this.date = date;
-		this.user_id = user_id;
+		this.user = user;
 	}
 
 	public int getPost_id() {
@@ -117,12 +117,12 @@ public class Post {
 		this.date = date;
 	}
 
-	public User getUser_id() {
-		return user_id;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUser_id(User user_id) {
-		this.user_id = user_id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

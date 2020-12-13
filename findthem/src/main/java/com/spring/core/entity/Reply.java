@@ -31,24 +31,24 @@ public class Reply {
 	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
-	private User user_id;
+	private User user;
 	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name="post_id")
-	private Post post_id;
+	private Post post;
 
 	public Reply() {
 		
 	}
 
-	public Reply(int id, String text, String image, String date, User user_id, Post post_id) {
+	public Reply(int id, String text, String image, String date, User user, Post post) {
 		super();
 		this.id = id;
 		this.text = text;
 		this.image = image;
 		this.date = date;
-		this.user_id = user_id;
-		this.post_id = post_id;
+		this.user = user;
+		this.post = post;
 	}
 
 	public int getId() {
@@ -83,20 +83,20 @@ public class Reply {
 		this.date = date;
 	}
 
-	public User getUser_id() {
-		return user_id;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUser_id(User user_id) {
-		this.user_id = user_id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Post getPost_id() {
-		return post_id;
+	public Post getPost() {
+		return post;
 	}
 
-	public void setPost_id(Post post_id) {
-		this.post_id = post_id;
+	public void setPost(Post post) {
+		this.post = post;
 	}
 	
 }

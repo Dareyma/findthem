@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="user")
@@ -21,21 +22,27 @@ public class User {
 	@Column(name="id")
 	private int id;
 	
+	@NotEmpty(message = "El nombre de ususario no puede estar en blanco")
 	@Column(name="username", unique=true)
 	private String username;
 	
+	@NotEmpty(message = "El nombre no puede estar en blanco")
 	@Column(name="name")
 	private String name;
 	
+	@NotEmpty(message = "Los apellidos no pueden estar en blanco")
 	@Column(name="surname")
 	private String surname;
 	
+	@NotEmpty(message = "La contraseña no puede estar en blanco")
 	@Column(name="password")
 	private String password;
 	
+	@NotEmpty(message = "El email no puede estar en blanco")
 	@Column(name="email")
 	private String email;
 	
+	//@Size(min = 9, max = 9)
 	@Column(name="phone")
 	private int phone;
 	

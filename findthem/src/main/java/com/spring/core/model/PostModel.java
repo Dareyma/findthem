@@ -23,14 +23,14 @@ public class PostModel {
 	
 	private String date;
 	
-	private UserModel user_id;
+	private UserModel user;
 	
 	public PostModel() {
 		
 	}
 
-	public PostModel(int post_id,String title, String text, int type, String image, String location, String date,
-			UserModel user_id) {
+	public PostModel(int post_id, String title,String text,int type, String image, String location, String date,
+			UserModel user) {
 		super();
 		this.post_id = post_id;
 		this.title = title;
@@ -39,7 +39,7 @@ public class PostModel {
 		this.image = image;
 		this.location = location;
 		this.date = date;
-		this.user_id = user_id;
+		this.user = user;
 	}
 
 	public int getPost_id() {
@@ -98,12 +98,12 @@ public class PostModel {
 		this.date = date;
 	}
 
-	public UserModel getUser_id() {
-		return user_id;
+	public UserModel getUser() {
+		return user;
 	}
 
-	public void setUser_id(UserModel user_id) {
-		this.user_id = user_id;
+	public void setUser(UserModel user) {
+		this.user = user;
 	}
 	
 }

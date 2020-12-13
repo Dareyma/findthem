@@ -61,14 +61,7 @@
                             <span class="focus-input100"></span>
                         </div>
 
-                        <div class="wrap-input100 d-flex validate-input m-b-5" data-validate="Type user name">
-                            <select class="browser-default custom-select" data-style="btn-primary" name="role">
-                                <option th:value="ROLE_PROTECTORA">PROTECTORA</option>
-                                <option th:value="ROLE_USER" selected>USUARIO</option>
-                                <option th:value="ROLE_INVITADO">INVITADO</option>
-                                <option th:value="ROLE_ADMIN">ADMIN</option>
-                            </select>
-                        </div>
+                        <input type="hidden" name="role" th:value="ROLE_USER">
                         
                         <div class="container-login100-form-btn">
                             <button class="login100-form-btn" type="submit">
