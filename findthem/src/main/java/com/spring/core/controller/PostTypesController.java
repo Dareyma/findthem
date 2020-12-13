@@ -1,10 +1,7 @@
 package com.spring.core.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -30,24 +27,12 @@ public class PostTypesController {
 	@Qualifier("likeServiceImpl")
 	private LikeService likeService;
 	
-	private static final Log LOG=LogFactory.getLog(ReplyController.class);
-	
 	@GetMapping("/listPostType")
 	public ModelAndView listTypePosts(@RequestParam(name="type") int type) {
 		
 		ModelAndView mav = new ModelAndView(Constantes.POST_VIEW);
 		
-		List<PostModel> postslist = postService.listAllPosts();
-		
-		List<PostModel> plist = new ArrayList<PostModel>();
-		
-		for(PostModel post:postslist) {
-			LOG.info("Entra en el for" + postslist);
-            if(post.getType()==type) {
-                plist.add(post);
-                LOG.info("Añadida: " + post);
-            }
-        }
+		List<PostModel> plist = postService.findAllByType(type);
 		
 		mav.addObject("posts", plist);
 		

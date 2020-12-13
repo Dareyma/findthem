@@ -66,6 +66,21 @@ public class PostServiceImpl implements PostService{
     }
 	
 	@Override
+    public List<PostModel> findAllByType(int type) {
+		List<Post> postResponse = postRepository.findAllByType(type);
+		
+		if(postResponse.isEmpty()) {
+			return null;
+		} else {
+			List<PostModel> plist = new ArrayList<PostModel>();
+			for(Post post:postResponse) {
+	            plist.add(transform(post));
+	        }
+			return plist;
+		}
+    }
+	
+	@Override
     public List<PostModel> findAllByUser(UserModel userModel) {
 		User user = transform(userModel);
 		List<Post> postResponse = postRepository.findAllByUser(user);

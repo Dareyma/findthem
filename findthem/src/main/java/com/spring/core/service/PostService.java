@@ -31,5 +31,7 @@ public interface PostService {
 
 	List<PostModel> findAllByUser(UserModel userModel);
 
+	List<PostModel> findAllByType(int type);
+
 	
 }

@@ -79,7 +79,6 @@ public class PostsController {
 			LOG.info("Prueba2: " + userModel.getUsername());
 			
             if (result.hasErrors()) {
-            	//LOG.info("PostModel User id: " + postModel.getUser_id().getName());
             	LOG.info("Error al crear un post");
             	return "createPost";
             }else {
@@ -105,7 +104,7 @@ public class PostsController {
                     }
                 }else {
                     
-                    postModel.setImage("/img/michi.jpg");
+                    postModel.setImage("/img/logo.jpg");
                 }
                 postModel.setUser(userModel);
                 postService.addPost(postModel);

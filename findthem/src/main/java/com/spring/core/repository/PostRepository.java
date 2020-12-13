@@ -13,5 +13,7 @@ import com.spring.core.entity.User;
 public interface PostRepository extends JpaRepository<Post, Serializable>{
 
 	List<Post> findAllByUser(User user);
+
+	List<Post> findAllByType(int type);
 	
 }
