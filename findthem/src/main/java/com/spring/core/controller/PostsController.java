@@ -88,10 +88,10 @@ public class PostsController {
                     LOG.info("ruta"+ruta);
                     try {
                         byte[] bytes=img.getBytes();
-                        Path rutaCompleta=Paths.get(ruta + "\\" + postService.listAllPosts().size() + userModel.getUsername() + ".jpg");
-                        LOG.info("Ruta de la imagen: "+rutaCompleta);
+                        Path rutaCompleta=Paths.get(ruta + "\\" + postModel.getPost_id() + userModel.getUsername() + ".jpg");
+                        LOG.info("Ruta de la imagen: " + rutaCompleta);
                         Files.write(rutaCompleta,bytes);
-                        postModel.setImage("/img/"+ postService.listAllPosts().size() + userModel.getUsername() +".jpg");
+                        postModel.setImage("/img/" + postModel.getPost_id() + userModel.getUsername() + ".jpg");
                         
                         // Fecha de creación del post
                         Date date = new Date();
